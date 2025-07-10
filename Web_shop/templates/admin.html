@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h2>Admin Dashboard</h2>
+    <div class="balance">Welcome, {{ session.username }} (Level {{ current_user.admin_level }} Admin)</div>
+</div>
+
+<section class="admin-section">
+    <h3>User Management</h3>
+    <div class="grid">
+        {% for username, user in users.items() %}
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{{ username }}</h4>
+                <p class="card-text">Role: {{ user.role|title }}</p>
+                {% if user.role == 'admin' %}
+                    <p class="card-text">Admin Level: {{ user.admin_level }}</p>
+                {% endif %}
+                <p class="card-text">Balance: ${{ "%.2f"|format(user.balance) }}</p>
+                
+                {% if current_user.admin_level > 1 and user.role != 'admin' or 
+                      (user.role == 'admin' and current_user.admin_level > user.admin_level) %}
+                <form method="POST" action="{{ url_for('promote_user') }}">
+                    <input type="hidden" name="username" value="{{ username }}">
+                    <div class="form-group">
+                        <select name="role" class="form-control">
+                            <option value="buyer" {% if user.role == 'buyer' %}selected{% endif %}>Buyer</option>
+                            <option value="seller" {% if user.role == 'seller' %}selected{% endif %}>Seller</option>
+                            {% if current_user.admin_level > 1 %}
+                            <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                    {% if current_user.admin_level > 1 %}
+                    <div class="form-group">
+                        <select name="admin_level" class="form-control" {% if user.role != 'admin' %}disabled{% endif %}>
+                            <option value="1" {% if user.get('admin_level', 0) == 1 %}selected{% endif %}>Junior Admin</option>
+                            <option value="2" {% if user.get('admin_level', 0) == 2 %}selected{% endif %}>Mid Admin</option>
+                            <option value="3" {% if user.get('admin_level', 0) == 3 %}selected{% endif %}>Top Admin</option>
+                        </select>
+                    </div>
+                    {% endif %}
+                    <button type="submit" class="btn btn-success">Update Role</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="admin-section">
+    <h3>Pending Notifications</h3>
+    {% if notifications %}
+    <div class="grid">
+        {% for notification in notifications %}
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{{ notification.message }}</h4>
+                <p class="card-text">From: {{ notification.from }}</p>
+                <p class="card-text">Type: {{ notification.type|replace('_', ' ')|title }}</p>
+                <p class="card-text">Status: {{ notification.status|title }}</p>
+                
+                {% if notification.status == 'pending' %}
+                <form method="POST" action="{{ url_for('process_notification', notification_id=loop.index0) }}">
+                    <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
+                    <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No pending notifications.</p>
+    {% endif %}
+</section>
+{% endblock %}

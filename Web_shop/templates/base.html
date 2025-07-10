@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Store - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="{{ url_for('dashboard') }}">Online Store</a></h1>
+            <nav>
+                <ul>
+                    {% if 'username' in session %}
+                        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                        {% if session.role == 'admin' %}
+                            <li><a href="{{ url_for('admin_dashboard') }}">Admin Panel</a></li>
+                        {% elif session.role == 'seller' %}
+                            <li><a href="{{ url_for('seller_dashboard') }}">Seller Panel</a></li>
+                        {% else %}
+                            <li><a href="{{ url_for('buyer_dashboard') }}">Shop</a></li>
+                        {% endif %}
+                        <li>
+                            <a href="{{ url_for('view_notifications') }}">
+                                Notifications
+                                {% set unread = user.notifications|selectattr('read', 'equalto', False)|list %}
+                                {% if unread %}<span class="badge">{{ unread|length }}</span>{% endif %}
+                            </a>
+                        </li>
+                        <li><a href="{{ url_for('logout') }}">Logout ({{ session.username }})</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('login') }}">Login</a></li>
+                        <li><a href="{{ url_for('register') }}">Register</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Online Store. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

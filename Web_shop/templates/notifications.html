@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<div class="notifications-container">
+    <h2>Your Notifications</h2>
+    
+    {% if notifications %}
+    <div class="notifications-list">
+        {% for notification in notifications|reverse %}
+        <div class="card {% if not notification.read %}unread{% endif %}">
+            <div class="card-body">
+                <div class="notification-header">
+                    <span class="notification-type {{ notification.type }}">
+                        {{ notification.type|title }}
+                    </span>
+                    <span class="notification-time">
+                        {% if notification.timestamp %}
+                          {{ notification.timestamp|datetimeformat }}
+                        {% else %}
+                         N/A
+                        {% endif %}
+
+                    </span>
+                </div>
+                <p class="notification-message">{{ notification.message }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>You have no notifications.</p>
+    {% endif %}
+</div>
+{% endblock %}

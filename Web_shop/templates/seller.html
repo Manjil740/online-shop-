@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Seller Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h2>Welcome, {{ session.username }}</h2>
+    <div class="balance">Your Balance: ${{ "%.2f"|format(user.balance) }}</div>
+</div>
+
+<section class="items-section">
+    <div class="admin-actions">
+        <a href="{{ url_for('add_item') }}" class="btn btn-success">+ Add New Item</a>
+    </div>
+
+    <h3>Your Listed Items</h3>
+    {% if user['items'] %}
+    <div class="grid">
+        {% for item in items %}
+        <div class="card">
+            <img src="{{ url_for('static', filename='images/' + item.image) }}" alt="{{ item.name }}" class="card-img">
+            <div class="card-body">
+                <h4 class="card-title">{{ item.name }}</h4>
+                <p class="card-text">{{ item.description[:100] }}{% if item.description|length > 100 %}...{% endif %}</p>
+                <p class="card-price">${{ "%.2f"|format(item.price) }}</p>
+                <p class="card-text">Stock: {{ item.stock }}</p>
+                <div class="admin-actions">
+                    <a href="{{ url_for('edit_item', item_id=item.id) }}" class="btn btn-warning">Edit</a>
+                    <form method="POST" action="{{ url_for('delete_item', item_id=item.id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>You haven't listed any items yet.</p>
+    {% endif %}
+</section>
+
+<section class="history-section">
+    <h3>Sales History</h3>
+    {% if user['sales'] %}
+    <div class="history-list">
+        {% for sale in user['sales']|reverse %}
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Sold {{ sale.quantity }} × {{ sale.item_name }}</h4>
+                <p class="card-text">To: {{ sale.buyer }}</p>
+                <p class="card-text">Total: ${{ "%.2f"|format(sale.total) }}</p>
+                <p class="card-text">{{ sale.timestamp|datetimeformat }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No sales history available.</p>
+    {% endif %}
+</section>
+{% endblock %}

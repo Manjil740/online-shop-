@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}{{ item.name }}{% endblock %}
+
+{% block content %}
+<div class="item-detail">
+    <div class="item-image-container">
+        <img src="{{ url_for('static', filename='images/' + item.image) }}" alt="{{ item.name }}" class="item-image">
+    </div>
+    
+    <div class="item-info">
+        <h2>{{ item.name }}</h2>
+        <p class="item-seller">Sold by: {{ seller.username }}</p>
+        <p class="item-price">${{ "%.2f"|format(item.price) }}</p>
+        <p class="item-stock">Available: {{ item.stock }}</p>
+        
+        <div class="item-description">
+            <h3>Description</h3>
+            <p>{{ item.description }}</p>
+        </div>
+        
+        {% if item.stock > 0 %}
+        <form method="POST" action="{{ url_for('buy_item') }}">
+            <input type="hidden" name="item_id" value="{{ item.id }}">
+            
+            <div class="quantity-selector">
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" min="1" max="{{ item.stock }}" value="1">
+                <span>Max: {{ item.stock }}</span>
+            </div>
+            
+            <button type="submit" class="btn btn-success">Buy Now</button>
+        </form>
+        {% else %}
+        <div class="out-of-stock">
+            <p class="text-danger">This item is currently out of stock</p>
+        </div>
+        {% endif %}
+        
+        {% if session.role in ['admin', 'seller'] and (session.role == 'admin' or item.seller == session.username) %}
+        <div class="admin-actions mt-4">
+            <a href="{{ url_for('edit_item', item_id=item.id) }}" class="btn btn-warning">Edit Item</a>
+            <a href="{{ url_for('delete_item', item_id=item.id) }}" class="btn btn-danger" 
+               onclick="return confirm('Are you sure you want to delete this item?')">Delete Item</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
