@@ -1,1 +1,28 @@
-# online-shop-
+So this is a code i made as a sample for a shop or lets say an online shop with its own way of currency. It was one of my best yet incomplete like my every other project. Mainly cuz of my school i couldn't complete this project
+
+
+------------------------------------------features---------------------------------------------
+Different level authorities have
+   |=> Admin : As an admin you can remove accounts who violates yours policy or do malicious activity in the server/app 
+   |         : Admins can as well Add items and set their prices. Admins can edit the prices 
+   |         : Admins can give fund to different users As the fund used while purchasing an item is vanished.
+   |         : Admin pannel will be updated with further more powers in later upcoming updates
+   |
+   |=> User : As an user you have almost no power except from buying items enlisted by admin 
+
+
+   Advance Security Verification(ASV)
+   not really actully currently the password is being verified just by comparing with the data base and only that so more updates will come for security
+
+   History Saveing
+   yes every purchase made will be saved with how much money spent on buying the item
+
+   Advance DBMS
+   again not really but you dont need to bother making a data base and organising it as soon as a account is made user.json will create it self automatically 
+   and as soon as the code is compiled and run store.json will create it self automatically as well which can be further modified by admin or the one with access of database
+
+   -------------------------------guide--------------------------------------
+   its pretty simple acutlly You can make an account just by making 
+   Is_admin = true 
+   which is flase as, Is_admin = false 
+   for that open the data base user.json and change the rank
