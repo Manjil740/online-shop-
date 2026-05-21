@@ -515,4 +515,4 @@ def datetimeformat(value, format='%Y-%m-%d %H:%M:%S'):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=os.getenv('FLASK_DEBUG') == '1')
