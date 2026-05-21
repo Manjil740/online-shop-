@@ -44,6 +44,14 @@ header {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
 header h1 a {
     color: white;
     text-decoration: none;
@@ -64,11 +72,15 @@ nav ul li a {
     color: white;
     text-decoration: none;
     font-weight: 500;
+    display: inline-block;
+    padding: 0.35rem 0.5rem;
+    border-radius: var(--border-radius);
     transition: color 0.3s;
 }
 
 nav ul li a:hover {
     color: var(--accent-color);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .badge {
@@ -131,6 +143,15 @@ nav ul li a:hover {
 
 .card-body {
     padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.card-img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
 }
 
 .card-title {
@@ -166,6 +187,11 @@ nav ul li a:hover {
 
 .btn:hover {
     background-color: var(--secondary-color);
+}
+
+.btn:focus-visible {
+    outline: 3px solid rgba(79, 195, 247, 0.5);
+    outline-offset: 2px;
 }
 
 .btn-outline {
@@ -301,6 +327,7 @@ textarea.form-control {
     padding: 0.5rem;
 }
 
+.login-form,
 .register-form {
     max-width: 500px;
     width: 100%;
@@ -381,6 +408,37 @@ textarea.form-control {
     flex-wrap: wrap;
 }
 
+.inline-form {
+    display: inline;
+}
+
+.mt-3 {
+    margin-top: 1rem;
+}
+
+.mt-4 {
+    margin-top: 1.5rem;
+}
+
+.text-danger {
+    color: var(--danger-color);
+}
+
+main.container {
+    min-height: calc(100vh - 180px);
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+footer {
+    background-color: var(--dark-color);
+    color: #cfd8dc;
+    padding: 0.9rem 0;
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
 /* Responsive Breakpoints */
 @media (max-width: 992px) {
     .grid {
@@ -389,6 +447,11 @@ textarea.form-control {
 }
 
 @media (max-width: 768px) {
+    header .container {
+        justify-content: center;
+        text-align: center;
+    }
+
     nav ul {
         flex-direction: column;
         align-items: flex-start;

@@ -377,7 +377,7 @@ def edit_item(item_id):
     
     return render_template('edit_item.html', item=item)
 
-@app.route('/seller/delete_item/<int:item_id>')
+@app.route('/seller/delete_item/<int:item_id>', methods=['POST'])
 @seller_required
 def delete_item(item_id):
     items = load_data('items.json')
